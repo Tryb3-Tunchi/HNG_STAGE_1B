@@ -1,0 +1,354 @@
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Tokens ─────────────────────────────────────────────── */
+:root {
+  --bg:          #080810;
+  --surface:     #111118;
+  --surface-2:   #19191f;
+  --surface-3:   #222230;
+  --border:      rgba(255,255,255,0.07);
+  --border-2:    rgba(255,255,255,0.12);
+
+  --text-1: #f0f0f5;
+  --text-2: #8f8fa8;
+  --text-3: #44445a;
+
+  --indigo:      #6366f1;
+  --indigo-soft: rgba(99,102,241,0.15);
+  --green:       #4ade80;
+  --green-soft:  rgba(74,222,128,0.12);
+  --pink:        #f472b6;
+  --pink-soft:   rgba(244,114,182,0.12);
+  --amber:       #fbbf24;
+  --amber-soft:  rgba(251,191,36,0.1);
+
+  --radius-card:  24px;
+  --radius-pill:  100px;
+  --ease: cubic-bezier(0.4,0,0.2,1);
+  --dur:  0.2s;
+
+  --shadow:
+    0 0 0 1px rgba(99,102,241,0.1),
+    0 24px 64px rgba(0,0,0,0.6),
+    0 4px 16px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+/* ── Base ───────────────────────────────────────────────── */
+html { -webkit-font-smoothing: antialiased; }
+
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 65% 45% at 10% 15%, rgba(99,102,241,0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 85%, rgba(244,114,182,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 55% at 55% 45%, rgba(74,222,128,0.04) 0%, transparent 70%);
+  font-family: 'Instrument Sans', sans-serif;
+  color: var(--text-1);
+}
+
+/* ── Card ───────────────────────────────────────────────── */
+.profile-card {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 32px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: cardIn 0.55s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+.profile-card:hover {
+  box-shadow:
+    0 0 0 1px rgba(99,102,241,0.18),
+    0 28px 72px rgba(0,0,0,0.65),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+@keyframes cardIn {
+  from { opacity:0; transform: translateY(20px) scale(0.97); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+
+/* Decorative blobs */
+.card__blob {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(60px);
+  z-index: 0;
+}
+.card__blob--1 {
+  width: 280px; height: 200px;
+  top: -80px; right: -60px;
+  background: rgba(99,102,241,0.12);
+}
+.card__blob--2 {
+  width: 200px; height: 180px;
+  bottom: -60px; left: -40px;
+  background: rgba(244,114,182,0.07);
+}
+
+/* All real content above blobs */
+.card__hero,
+.card__section,
+.card__divider,
+.card__two-col,
+.time-section {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Hero row ────────────────────────────────────────────── */
+.card__hero {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+/* Avatar */
+.avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 2px solid var(--border-2);
+  background: var(--surface-3);
+  display: block;
+  object-fit: cover;
+  transition: border-color var(--dur);
+}
+
+.avatar-wrap:hover .avatar {
+  border-color: var(--indigo);
+}
+
+.avatar__status {
+  position: absolute;
+  bottom: 4px; right: 4px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--green);
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 0 rgba(74,222,128,0.4);
+  animation: statusPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.4); }
+  50%       { box-shadow: 0 0 0 5px rgba(74,222,128,0); }
+}
+
+/* Name + handle + bio */
+.hero__text { flex: 1; min-width: 0; }
+
+.profile-name {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  font-weight: 800;
+  color: var(--text-1);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.profile-handle {
+  font-size: 0.78rem;
+  color: var(--indigo);
+  font-weight: 500;
+  margin-bottom: 10px;
+  letter-spacing: 0.01em;
+}
+
+.profile-bio {
+  font-size: 0.875rem;
+  color: var(--text-2);
+  line-height: 1.65;
+}
+
+.profile-bio strong {
+  color: var(--text-1);
+  font-weight: 600;
+}
+
+/* ── Timestamp ───────────────────────────────────────────── */
+.time-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.epoch-time {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--indigo);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
+}
+
+/* ── Divider ─────────────────────────────────────────────── */
+.card__divider {
+  height: 1px;
+  margin: 20px 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border) 20%,
+    var(--border) 80%,
+    transparent
+  );
+}
+
+/* ── Section label ───────────────────────────────────────── */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 12px;
+}
+
+.section-icon { font-size: 0.7rem; }
+
+/* ── Social links ────────────────────────────────────────── */
+.social-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-2);
+  text-decoration: none;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  transition:
+    color var(--dur) var(--ease),
+    background var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    transform 0.15s ease;
+}
+
+.social-link:hover {
+  color: var(--text-1);
+  background: var(--surface-3);
+  border-color: var(--border-2);
+  transform: translateY(-1px);
+}
+
+.social-link:focus-visible {
+  outline: 2.5px solid var(--indigo);
+  outline-offset: 2px;
+}
+
+.social-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+/* Per-network accent on hover */
+a[data-testid="test-user-social-github"]:hover   { color: #e6edf3; border-color: rgba(230,237,243,0.2); }
+a[data-testid="test-user-social-twitter"]:hover  { color: #1d9bf0; border-color: rgba(29,155,240,0.2); }
+a[data-testid="test-user-social-linkedin"]:hover { color: #0a66c2; border-color: rgba(10,102,194,0.2); }
+a[data-testid="test-user-social-instagram"]:hover{ color: var(--pink); border-color: rgba(244,114,182,0.2); }
+
+/* ── Two-col (hobbies + dislikes) ────────────────────────── */
+.card__two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* ── Pill lists ──────────────────────────────────────────── */
+.pill-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pill-list li {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  transition: background var(--dur);
+}
+
+/* Hobbies — indigo tint */
+.pill-list:not(.pill-list--dislikes) li {
+  background: var(--indigo-soft);
+  color: #a5b4fc;
+  border-color: rgba(99,102,241,0.15);
+}
+.pill-list:not(.pill-list--dislikes) li:hover {
+  background: rgba(99,102,241,0.22);
+}
+
+/* Dislikes — pink tint */
+.pill-list--dislikes li {
+  background: var(--pink-soft);
+  color: var(--pink);
+  border-color: rgba(244,114,182,0.15);
+}
+.pill-list--dislikes li:hover {
+  background: rgba(244,114,182,0.2);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 500px) {
+  .profile-card { padding: 24px 20px; border-radius: 18px; }
+
+  .card__hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero__text { width: 100%; }
+
+  .social-list { justify-content: center; }
+
+  .card__two-col { grid-template-columns: 1fr; gap: 16px; }
+}
+
+@media (max-width: 360px) {
+  .profile-name { font-size: 1.05rem; }
+  .epoch-time   { font-size: 0.8rem; }
+  .time-section { flex-direction: column; align-items: flex-start; gap: 6px; }
+}
